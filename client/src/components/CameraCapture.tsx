@@ -34,18 +34,32 @@ export const CameraCapture = ({
   const captureImage = () => {
     if (videoRef.current && canvasRef.current) {
       const context = canvasRef.current.getContext('2d');
-      context?.drawImage(videoRef.current, 0, 0, 400, 300);
+      if (context) {
+        const { videoWidth, videoHeight } = videoRef.current;
+        canvasRef.current.width = videoWidth;
+        canvasRef.current.height = videoHeight;
 
-      canvasRef.current.toBlob((blob) => {
-        if (blob) {
-          onCapture(blob);
-          setCapturedImage(canvasRef.current?.toDataURL() || null);
-        }
-      });
+        // Flip horizontally
+        context.translate(videoWidth, 0);
+        context.scale(-1, 1);
 
-      stopCamera();
+        // Draw the flipped image
+        context.drawImage(videoRef.current, 0, 0, videoWidth, videoHeight);
+
+        // Convert to Blob and set the image
+        canvasRef.current.toBlob((blob) => {
+          if (blob) {
+            onCapture(blob);
+            //@ts-ignore
+            setCapturedImage(canvasRef.current.toDataURL()); // Save as Data URL
+          }
+        });
+
+        stopCamera();
+      }
     }
   };
+
 
   return (
     <Card className="w-full overflow-hidden">

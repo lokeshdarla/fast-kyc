@@ -7,21 +7,18 @@ import { GlobalContext } from '@/context/context';
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
-export const CustomerLayout = ({ children }: PropsWithChildren)=>{
+export const CustomerLayout = ({ children }: PropsWithChildren) => {
 
-    const {Customer} = useContext<any>(GlobalContext);
+    const { Customer } = useContext<any>(GlobalContext);
     const router = useRouter();
 
-    useEffect(()=>{
+    useEffect(() => {
 
-        if(Customer){
-            router.push('/customer')
+        if (!Customer) {
+            router.push('/business')
         }
-        else{
-            router.push('/business')       
-        }
-    },[])
-    
+    }, [])
+
     return (
         <div>
             <Navbar />
