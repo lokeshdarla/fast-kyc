@@ -58,17 +58,16 @@ export default function Home() {
 
 function WalletSelection() {
   const { autoConnect, setAutoConnect } = useAutoConnect();
-  const {setCustomer, setBusiness} = useContext<any>(GlobalContext);
+  const {setCustomer} = useContext<any>(GlobalContext);
 
   const handleRadioChange = (value: string) => {
     if (value === "Customer") {
       setCustomer(true);
-      setBusiness(false);
     } else  {
       setCustomer(false);
-      setBusiness(true);
     }
   };
+
   return (
     <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300">
       <CardHeader className="space-y-2">
@@ -127,10 +126,18 @@ function WalletSelection() {
 
 function NetworkStatus() {
   const { account, connected, network } = useWallet();
-
+  const {Customer} = useContext<any>(GlobalContext);
+  const {setWallet} = useContext<any>(GlobalContext);
 
   if (!connected) return null;
-  if(connected) redirect("/");
+  if(connected){
+     if(Customer){
+       redirect("/customer");
+      }
+      else{
+        redirect("/business");
+     }
+  }
 
   return (
     <Card className="shadow-md">
@@ -142,7 +149,7 @@ function NetworkStatus() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <StatusItem
               label="Account"
-              value={account?.address?.toString() ?? "Not connected"}
+              value={setWallet(account?.address?.toString()) ?? "Not connected"}
             />
             <StatusItem
               label="Network"
