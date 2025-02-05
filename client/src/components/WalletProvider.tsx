@@ -35,7 +35,7 @@ export const WalletProvider = ({ children }: PropsWithChildren) => {
       plugins={wallets}
       autoConnect={autoConnect}
       dappConfig={{
-        network: Network.TESTNET,
+        network: Network.DEVNET,
         aptosApiKeys: {
           testnet: process.env.NEXT_PUBLIC_APTOS_API_KEY_TESNET,
           devnet: process.env.NEXT_PUBLIC_APTOS_API_KEY_DEVNET,

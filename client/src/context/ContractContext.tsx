@@ -1,3 +1,5 @@
+
+"use client"
 import React, { useEffect, useState, createContext, useContext } from "react";
 import { aptosClient, isSendableNetwork } from "@/utils";
 import {
@@ -14,7 +16,7 @@ interface StateContextProps {
   ) => Promise<void>;
 }
 
-const StateContext = createContext<Partial<StateContextProps>>({});
+export const StateContext = createContext<Partial<StateContextProps>>({});
 
 export const StateContextProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { account, signAndSubmitTransaction, network } = useWallet();
@@ -27,7 +29,10 @@ export const StateContextProvider: React.FC<{ children: React.ReactNode }> = ({ 
     orgDescription: string,
     requiredDocs: string[]
   ) => {
-    if (!account) return;
+    if (!account) {
+      console.log("ndmc");
+      return;
+    }
 
     const payload: InputTransactionData = {
       data: {
@@ -40,7 +45,7 @@ export const StateContextProvider: React.FC<{ children: React.ReactNode }> = ({ 
     try {
       const response = await signAndSubmitTransaction(payload);
       console.log("Transaction Hash:", response.hash);
-      await aptos.waitForTransaction(response.hash);
+      await aptos.waitForTransaction({ transactionHash: response.hash });
       alert("Organization registered successfully on Devnet!");
     } catch (error) {
       console.error("Failed to register organization", error);

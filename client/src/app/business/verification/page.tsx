@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -7,7 +7,11 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { BusinessLayout } from '@/components/BusinessLayout';
+import { StateContext } from '@/context/ContractContext';
+
 const BusinessRegistrationForm = () => {
+  const { handleRegisterOrganization } = useContext<any>(StateContext);
+
   const gstData = {
     "stateJurisdictionCode": "AP114",
     "legalName": "WIREGUY ELECTRICALS PRIVATE LIMITED",
@@ -29,28 +33,38 @@ const BusinessRegistrationForm = () => {
     }
   };
 
-  const [formData, setFormData] = useState({
-    // GST Details
-    gstNumber: gstData.gstNumber,
+  const Jsonstring = {
     legalName: gstData.legalName,
-    tradeName: '',
+    tradeName: 'aaa',
     businessType: gstData.constitutionOfBusiness,
     registrationDate: gstData.registrationDate,
     businessNature: gstData.natureOfBusinessActivity[0],
-
-    // Contact Details
-    email: '',
-    phone: '',
-
-    // Address from GST
+    email: 'aaa',
+    phone: '1234',
     buildingNumber: gstData.principalAddress.address.buildingNumber,
     street: gstData.principalAddress.address.street,
     location: gstData.principalAddress.address.location,
     district: gstData.principalAddress.address.district,
     state: gstData.principalAddress.address.streetcd,
     pincode: gstData.principalAddress.address.pincode,
+  };
 
-    // KYC Requirements
+  const [selectedCheckboxes, setSelectedCheckboxes] = useState<string[]>([]);
+  const [formData, setFormData] = useState({
+    gstNumber: gstData.gstNumber,
+    legalName: gstData.legalName,
+    tradeName: 'aaa',
+    businessType: gstData.constitutionOfBusiness,
+    registrationDate: gstData.registrationDate,
+    businessNature: gstData.natureOfBusinessActivity[0],
+    email: 'aaa',
+    phone: '1234',
+    buildingNumber: gstData.principalAddress.address.buildingNumber,
+    street: gstData.principalAddress.address.street,
+    location: gstData.principalAddress.address.location,
+    district: gstData.principalAddress.address.district,
+    state: gstData.principalAddress.address.streetcd,
+    pincode: gstData.principalAddress.address.pincode,
     kycPreferences: {
       identityDocuments: false,
       addressProof: false,
@@ -61,27 +75,32 @@ const BusinessRegistrationForm = () => {
     }
   });
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleCheckboxChange = (field) => {
+  const handleCheckboxChange = (field: string) => {
     setFormData(prev => ({
       ...prev,
       kycPreferences: {
         ...prev.kycPreferences,
-        [field]: !prev.kycPreferences[field]
+        [field]: !prev.kycPreferences[field] 
       }
     }));
+
+    setSelectedCheckboxes(prev => 
+      prev.includes(field) ? prev.filter(item => item !== field) : [...prev, field]
+    );
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Form submitted:', formData);
+    console.log('Selected checkboxes:', selectedCheckboxes);
+    console.log('JSON string:', JSON.stringify(Jsonstring));
+    console.log('GST Number:', formData.gstNumber);
+    handleRegisterOrganization(formData.gstNumber, JSON.stringify(Jsonstring), selectedCheckboxes);
   };
 
   return (
@@ -283,7 +302,7 @@ const BusinessRegistrationForm = () => {
                   checked={formData.kycPreferences.identityDocuments}
                   onCheckedChange={() => handleCheckboxChange('identityDocuments')}
                 />
-                <Label htmlFor="identityDocuments">Identity Documents</Label>
+                <Label htmlFor="identityDocuments">Aadhar PAN</Label>
               </div>
 
               <div className="flex items-center space-x-2">
@@ -292,44 +311,10 @@ const BusinessRegistrationForm = () => {
                   checked={formData.kycPreferences.addressProof}
                   onCheckedChange={() => handleCheckboxChange('addressProof')}
                 />
-                <Label htmlFor="addressProof">Address Proof</Label>
+                <Label htmlFor="addressProof">PAN</Label>
               </div>
 
-              <div className="flex items-center space-x-2">
-                <Checkbox
-                  id="bankDetails"
-                  checked={formData.kycPreferences.bankDetails}
-                  onCheckedChange={() => handleCheckboxChange('bankDetails')}
-                />
-                <Label htmlFor="bankDetails">Bank Details</Label>
-              </div>
-
-              <div className="flex items-center space-x-2">
-                <Checkbox
-                  id="taxDocuments"
-                  checked={formData.kycPreferences.taxDocuments}
-                  onCheckedChange={() => handleCheckboxChange('taxDocuments')}
-                />
-                <Label htmlFor="taxDocuments">Tax Documents</Label>
-              </div>
-
-              <div className="flex items-center space-x-2">
-                <Checkbox
-                  id="businessProof"
-                  checked={formData.kycPreferences.businessProof}
-                  onCheckedChange={() => handleCheckboxChange('businessProof')}
-                />
-                <Label htmlFor="businessProof">Business Proof</Label>
-              </div>
-
-              <div className="flex items-center space-x-2">
-                <Checkbox
-                  id="directorDetails"
-                  checked={formData.kycPreferences.directorDetails}
-                  onCheckedChange={() => handleCheckboxChange('directorDetails')}
-                />
-                <Label htmlFor="directorDetails">Director Details</Label>
-              </div>
+            
             </div>
           </div>
         </CardContent>

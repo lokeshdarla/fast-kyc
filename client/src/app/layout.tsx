@@ -1,6 +1,7 @@
 import "@aptos-labs/wallet-adapter-ant-design/dist/index.css";
 import "./globals.css";
 import { ContextProvider} from "@/context/context";
+import { StateContextProvider } from "@/context/ContractContext";
 import { WalletProvider } from "@/components/WalletProvider";
 import { Toaster } from "@/components/ui/toaster";
 import { cn } from "@/lib/utils";
@@ -35,11 +36,14 @@ export default function RootLayout({ children }: PropsWithChildren) {
         <AutoConnectProvider>
           <ReactQueryClientProvider>
             <WalletProvider>
+              <StateContextProvider>
+
               <div className='w-full max-w-screen-xl'>
               
                 {children}
               </div>
               <Toaster />
+              </StateContextProvider>
             </WalletProvider>
           </ReactQueryClientProvider>
         </AutoConnectProvider>
