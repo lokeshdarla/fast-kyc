@@ -128,7 +128,7 @@ function ConnectWalletDialog({
           <DialogTitle className="flex flex-col text-center leading-snug">
             {hasAptosConnectWallets ? (
               <>
-                <span>Log in or sign up</span>
+                <span>Log innnnnn or sign up</span>
                 <span>with Social + Aptos Connect</span>
               </>
             ) : (

@@ -3,7 +3,7 @@
 import React from 'react';
 import { useAutoConnect } from "@/components/AutoConnectProvider";
 import { WalletSelector as ShadcnWalletSelector } from "@/components/WalletSelector";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { redirect } from "next/navigation";
 import {
   Card,
   CardContent,
@@ -11,11 +11,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import { MyWallet } from "@/utils/standardWallet";
 import { registerWallet } from "@aptos-labs/wallet-standard";
+import { Label } from "@/components/ui/label"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import {GlobalContext} from "@/context/context";
+import { useContext } from 'react';
 
 // Register wallet on client-side only
 if (typeof window !== "undefined") {
@@ -55,11 +58,43 @@ export default function Home() {
 
 function WalletSelection() {
   const { autoConnect, setAutoConnect } = useAutoConnect();
+  const {setCustomer, setBusiness} = useContext<any>(GlobalContext);
 
+  const handleRadioChange = (value: string) => {
+    if (value === "Customer") {
+      setCustomer(true);
+      setBusiness(false);
+    } else  {
+      setCustomer(false);
+      setBusiness(true);
+    }
+  };
   return (
     <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300">
       <CardHeader className="space-y-2">
-        <CardTitle className="text-2xl">Connect Wallet</CardTitle>
+        <CardTitle className="text-2xl">
+          <div className='flex flex-row justify-between'>
+            <div>Connect Wallet</div>
+            <div>
+              
+              <RadioGroup defaultValue="Customer" 
+               onValueChange={(value) => handleRadioChange(value)}
+               >
+
+      <div className="flex items-center space-x-2">
+        <RadioGroupItem value="Customer" id="r2" />
+        <Label htmlFor="r2">Customer</Label>
+      </div>
+      <div className="flex items-center space-x-2">
+        <RadioGroupItem value="Business" id="r3" />
+        <Label htmlFor="r3">Business</Label>
+      </div>
+    </RadioGroup>
+    
+    </div>
+
+          </div>
+        </CardTitle>
         <CardDescription>
           Select your preferred wallet to interact with the Aptos network
         </CardDescription>
@@ -93,7 +128,9 @@ function WalletSelection() {
 function NetworkStatus() {
   const { account, connected, network } = useWallet();
 
+
   if (!connected) return null;
+  if(connected) redirect("/");
 
   return (
     <Card className="shadow-md">

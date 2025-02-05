@@ -1,6 +1,6 @@
 import "@aptos-labs/wallet-adapter-ant-design/dist/index.css";
 import "./globals.css";
-
+import { ContextProvider} from "@/context/context";
 import { WalletProvider } from "@/components/WalletProvider";
 import { Toaster } from "@/components/ui/toaster";
 import { cn } from "@/lib/utils";
@@ -31,7 +31,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
           fontSans.variable,
         )}
       >
-
+    <ContextProvider>
         <AutoConnectProvider>
           <ReactQueryClientProvider>
             <WalletProvider>
@@ -43,11 +43,9 @@ export default function RootLayout({ children }: PropsWithChildren) {
             </WalletProvider>
           </ReactQueryClientProvider>
         </AutoConnectProvider>
-
+    </ContextProvider>
       </body>
-      <script>
 
-      </script>
     </html>
   );
 }
