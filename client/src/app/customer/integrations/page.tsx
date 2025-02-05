@@ -41,6 +41,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
+import { CustomerLayout } from '@/components/CustomerLayout';
 
 interface BlockchainDetails {
   network: string;
@@ -226,6 +227,7 @@ const KYCTransactionsPage = () => {
   };
 
   return (
+    <CustomerLayout>
     <div className="container mx-auto p-6 max-w-6xl space-y-6">
       <Card>
         <CardHeader>
@@ -298,7 +300,9 @@ const KYCTransactionsPage = () => {
                     {new Date(completion.date).toLocaleDateString()}
                   </TableCell>
                   <TableCell>
-                    <Badge variant={getStatusVariant(completion.status)}>
+                    <Badge 
+                    //@ts-ignore
+                    variant={getStatusVariant(completion.status)}>
                       {getStatusIcon(completion.status)}
                       {completion.status}
                     </Badge>
@@ -313,6 +317,7 @@ const KYCTransactionsPage = () => {
                     <Button
                       variant="outline"
                       size="sm"
+                      //@ts-ignore
                       onClick={() => handleViewDetails(completion)}
                     >
                       <Eye className="mr-2 h-4 w-4" /> View Details
@@ -357,7 +362,8 @@ const KYCTransactionsPage = () => {
 
                   <Label className="font-semibold">Status:</Label>
                   <span className="col-span-3">
-                    <Badge variant={getStatusVariant(selectedTransaction.status)}>
+                    <Badge //@ts-ignore
+                    variant={getStatusVariant(selectedTransaction.status)}>
                       {selectedTransaction.status}
                     </Badge>
                   </span>
@@ -416,6 +422,7 @@ const KYCTransactionsPage = () => {
         </DialogContent>
       </Dialog>
     </div>
+    </CustomerLayout>
   );
 };
 

@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Eye, CheckCircle2, XCircle, Clock, Link as LinkIcon } from 'lucide-react';
-
+import { BusinessLayout } from '@/components/BusinessLayout';
 const KYCVerificationTable = () => {
   // Sample data for customers with KYC status
   const customers = [
@@ -149,6 +149,7 @@ const KYCVerificationTable = () => {
   );
 
   return (
+    <BusinessLayout>
     <Card className="w-full">
       <CardHeader>
         <CardTitle>Customer KYC Verifications</CardTitle>
@@ -204,6 +205,7 @@ const KYCVerificationTable = () => {
         </Table>
       </CardContent>
     </Card>
+    </BusinessLayout>
   );
 };
 

@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Stepper, StepperComponent } from '@/components/Stepper';
 import { CameraCapture } from '@/components/CameraCapture';
 import { DocumentUpload } from '@/components/DocumentUpload';
+import { CustomerLayout } from '@/components/CustomerLayout';
 
 const Page = () => {
   const [steps, setSteps] = useState<Stepper[]>([
@@ -121,6 +122,7 @@ const Page = () => {
   };
 
   return (
+    <CustomerLayout>
     <div className="container mx-auto max-w-5xl px-4 py-6 space-y-6">
       <StepperComponent
         steps={steps}
@@ -167,6 +169,7 @@ const Page = () => {
         )}
       </div>
     </div>
+    </CustomerLayout>
   );
 };
 

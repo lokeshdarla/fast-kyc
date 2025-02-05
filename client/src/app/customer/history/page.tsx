@@ -6,6 +6,7 @@ import { Clock, ArrowUpRight, ArrowDownLeft, Search, Copy } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { CustomerLayout } from '@/components/CustomerLayout';
 
 const TransactionsPage = () => {
   // Sample transaction data - replace with your actual data
@@ -53,7 +54,8 @@ const TransactionsPage = () => {
   };
 
   return (
-    <div className="container mx-auto p-6 max-w-6xl">
+    <CustomerLayout>
+          <div className="container mx-auto p-6 max-w-6xl">
       <div className="space-y-6">
         {/* Header Section */}
         <div className="flex justify-between items-center">
@@ -64,6 +66,7 @@ const TransactionsPage = () => {
                 placeholder="Search transactions..."
                 className="w-full"
                 type="search"
+                //@ts-ignore
                 icon={<Search className="w-4 h-4" />}
               />
             </div>
@@ -177,6 +180,8 @@ const TransactionsPage = () => {
         </Card>
       </div>
     </div>
+    </CustomerLayout>
+
   );
 };
 

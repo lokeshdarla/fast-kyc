@@ -1,3 +1,4 @@
+import { CustomerLayout } from '@/components/CustomerLayout';
 import KYCDataCard from '@/components/KycDataCard'
 
 import React from 'react'
@@ -77,11 +78,14 @@ const page = () => {
     }
   };
   return (
+    <CustomerLayout>
     <div className='w-full max-w-screen-xl'>
 
       {/* <StepperExample /> */}
       <KYCDataCard userData={defaultData} />
-    </div>
+      </div>
+    </CustomerLayout>
+
   )
 }
 

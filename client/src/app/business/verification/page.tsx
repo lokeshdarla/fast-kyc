@@ -6,7 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-
+import { BusinessLayout } from '@/components/BusinessLayout';
 const BusinessRegistrationForm = () => {
   const gstData = {
     "stateJurisdictionCode": "AP114",
@@ -85,6 +85,7 @@ const BusinessRegistrationForm = () => {
   };
 
   return (
+    <BusinessLayout>
     <form onSubmit={handleSubmit}>
       <Card className="w-full max-w-6xl mx-auto">
         <CardHeader>
@@ -340,6 +341,7 @@ const BusinessRegistrationForm = () => {
         </CardFooter>
       </Card>
     </form>
+    </BusinessLayout>
   );
 };
 

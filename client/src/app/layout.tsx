@@ -36,7 +36,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
           <ReactQueryClientProvider>
             <WalletProvider>
               <div className='w-full max-w-screen-xl'>
-                <Navbar />
+              
                 {children}
               </div>
               <Toaster />

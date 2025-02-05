@@ -16,7 +16,7 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Home, Settings, History, LogOut } from 'lucide-react';
 
-const Navbar = ({ userAddress = "0x1234...5678", userName = "John Doe" }) => {
+const BusinessNavbar = ({ userAddress = "0x1234...5678", userName = "John Doe" }) => {
   // Get user initials for avatar
   // const getInitials = (name) => {
   //   return name
@@ -46,7 +46,7 @@ const Navbar = ({ userAddress = "0x1234...5678", userName = "John Doe" }) => {
               <NavigationMenuItem>
                 <NavigationMenuLink
                   className="flex items-center space-x-2 text-sm font-medium hover:text-blue-600 transition-colors"
-                  href="/customer"
+                  href="/business"
                 >
                   <Home className="w-4 h-4" />
                   <span>Home</span>
@@ -55,19 +55,19 @@ const Navbar = ({ userAddress = "0x1234...5678", userName = "John Doe" }) => {
               <NavigationMenuItem>
                 <NavigationMenuLink
                   className="flex items-center space-x-2 text-sm font-medium hover:text-blue-600 transition-colors"
-                  href="/customer/integrations"
+                  href="/business/verification"
                 >
                   <Settings className="w-4 h-4" />
-                  <span>Integrations</span>
+                  <span>Verification</span>
                 </NavigationMenuLink>
               </NavigationMenuItem>
               <NavigationMenuItem>
                 <NavigationMenuLink
                   className="flex items-center space-x-2 text-sm font-medium hover:text-blue-600 transition-colors"
-                  href="/customer/history"
+                  href="/business/customer-history"
                 >
                   <History className="w-4 h-4" />
-                  <span>Transaction History</span>
+                  <span>Customer History</span>
                 </NavigationMenuLink>
               </NavigationMenuItem>
             </NavigationMenuList>
@@ -80,4 +80,4 @@ const Navbar = ({ userAddress = "0x1234...5678", userName = "John Doe" }) => {
   );
 };
 
-export default Navbar;
+export default BusinessNavbar;
