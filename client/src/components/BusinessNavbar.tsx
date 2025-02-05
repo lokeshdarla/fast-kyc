@@ -32,7 +32,7 @@ const BusinessNavbar = ({ userAddress = "0x1234...5678", userName = "John Doe" }
         {/* Logo */}
         <div className="flex items-center space-x-2">
           <span className="text-2xl font-bold">
-            one<span className="text-blue-600">KYC</span>
+            Fast<span className="text-blue-600">KYC</span>
           </span>
         </div>
 
