@@ -12,7 +12,9 @@ import { useContext } from 'react';
 import { GlobalContext } from '@/context/context';
 import { useWallet } from '@aptos-labs/wallet-adapter-react';
 import { StateContext } from '@/context/ContractContext';
-import Cookies from "js-cookie"; // Install this package if not already: npm install js-cookie
+import Cookies from "js-cookie";
+import { useRouter } from 'next/navigation';
+
 
 dotenv.config();
 
@@ -22,6 +24,7 @@ const Page = () => {
   const [capturedSelfie, setCapturedSelfie] = useState<Blob | null>(null);
   const { account } = useWallet();
   const { handleUploadDocument } = useContext<any>(StateContext);
+  const router = useRouter();
 
   const handleFileUpload = (fileType: string, file: File) => {
     setUploadedFiles(prev => ({
@@ -49,15 +52,14 @@ const Page = () => {
 
     try {
       const response = await axios.post(
-        'https://39b9-2401-4900-6572-217e-34d4-14fd-7542-dc3e.ngrok-free.app/api/getAadhaarInfo/',
-        formData,
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-
-          },
-        }
-      );
+				"https://a2b5-103-217-237-57.ngrok-free.app/api/getAadhaarInfo/",
+				formData,
+				{
+					headers: {
+						"Content-Type": "multipart/form-data",
+					},
+				}
+			);
 
       if (response.data) {
         console.log('Documents uploaded successfully:', response.data);
@@ -73,10 +75,10 @@ const Page = () => {
           },
         });
 
-        if (res.data.IpfsHash) {
-          alert("File encrypted and uploaded to IPFS successfully!");
-          handleUploadDocument("AADHAR", JSON.stringify(response.data), res.data.IpfsHash);
-        }
+         if (res.data.IpfsHash) {
+						await handleUploadDocument("aadhar", "", res.data.IpfsHash);
+						router.push("/customer");
+					}
 
       } else {
         console.error('Upload failed');
@@ -84,6 +86,9 @@ const Page = () => {
     } catch (error: any) {
       console.error('Error uploading documents:', error.response?.data || error.message);
     }
+     setUploadedFiles({});
+			setCapturedSelfie(null);
+			setCurrentStepId(1);
   };
 
   return (
