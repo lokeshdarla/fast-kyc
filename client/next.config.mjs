@@ -13,11 +13,11 @@ const nextConfig = {
   },
   async rewrites() {
     return [
-			{
-				source: "/api/proxy/:path*",
-				destination: "https://a2b5-103-217-237-57.ngrok-free.app/api/:path*", // Backend URL
-			},
-		];
+      {
+        source: "/api/proxy/:path*",
+        destination: "https://a2b5-103-217-237-57.ngrok-free.app/api/:path*", // Backend URL
+      },
+    ];
   },
 };
 

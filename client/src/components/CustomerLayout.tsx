@@ -15,7 +15,7 @@ export const CustomerLayout = ({ children }: PropsWithChildren) => {
         if (!connected || !account) {
             setTimeout(() => {
                 router.push("/login");
-            }, 5000); // Redirect to login after 10 seconds
+            }, 5000);
             return;
         }
 
