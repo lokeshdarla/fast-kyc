@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect, useContext } from "react";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
-import { Aptos, AptosConfig, Network } from "@aptos-labs/ts-sdk";
+import { Aptos, AptosConfig, Network, TransactionResponse } from "@aptos-labs/ts-sdk";
 import {
 	Table,
 	TableBody,
@@ -24,27 +24,36 @@ import { CustomerLayout } from "@/components/CustomerLayout";
 import { StateContext } from "@/context/ContractContext";
 
 const TransactionHistory = () => {
-	const [transactions, setTransactions] = useState([]);
+	const [transactions, setTransactions] = useState<TransactionResponse[]>([]);
 	const [isLoading, setIsLoading] = useState(true);
 	const [error, setError] = useState(null);
-  const { account } = useWallet();
-  // const { fetchTransactions } = useContext<any>(StateContext);
+	const { account } = useWallet();
+	// const { fetchTransactions } = useContext<any>(StateContext);
 
 	const aptosConfig = new AptosConfig({ network: Network.DEVNET });
-  const aptos = new Aptos(aptosConfig);
-  
-  
+	const aptos = new Aptos(aptosConfig);
+
+
 
 	const fetchTransactions = async () => {
 		if (!account?.address) return;
-    
+
 		try {
 			setIsLoading(true);
 			const response = await aptos.getAccountTransactions({
 				accountAddress: account.address,
-				limit: 100,
+
 			});
-			setTransactions(response);
+
+			const filteredResponse = response.filter((transaction) => {
+
+				//@ts-ignore
+				if (!transaction.payload?.function) return false;
+				//@ts-ignore
+				const functionName = transaction.payload.function.split("::");
+				return functionName[1] === "kycv8";
+			});
+			setTransactions(filteredResponse);
 		} catch (error) {
 			console.error("Failed to fetch transactions:", error);
 			setError("Failed to load transactions");
@@ -99,7 +108,7 @@ const TransactionHistory = () => {
 		);
 	}
 
-  return (
+	return (
 		<CustomerLayout>
 			<Card className='w-full'>
 				<CardHeader>
