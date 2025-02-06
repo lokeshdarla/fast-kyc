@@ -10,7 +10,9 @@ export const BusinessLayout = ({ children }: PropsWithChildren) => {
 
     useEffect(() => {
         if (!connected) {
-            router.push("/login");
+            setTimeout(() => {
+                router.push("/login");
+            }, 5000); // Redirect to login after 10 seconds
             return;
         }
 
@@ -24,7 +26,7 @@ export const BusinessLayout = ({ children }: PropsWithChildren) => {
         };
 
         checkUserRole();
-    }, [account, connected, router]); // Added dependencies
+    }, [account, connected, router]);
 
     return (
         <div>

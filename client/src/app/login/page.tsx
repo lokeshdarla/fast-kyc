@@ -19,6 +19,7 @@ import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { GlobalContext } from "@/context/context";
 import { useContext } from 'react';
+import { fetchUser } from '@/utils';
 
 // Register wallet on client-side only
 if (typeof window !== "undefined") {
@@ -27,14 +28,37 @@ if (typeof window !== "undefined") {
 }
 
 export default function Home() {
-  const { network, connected } = useWallet();
+  const { account, network, connected } = useWallet();
   const router = useRouter();
 
   useEffect(() => {
-    if (connected) {
+    if (!connected || !account) {
       router.push("/login");
+      return;
     }
-  }, [])
+
+    const checkUserRole = async () => {
+      try {
+        const user = await fetchUser(account.address);
+        if (user) {
+          if (user.role !== "CUSTOMER")
+            router.push("/business");
+          else {
+            router.push("/customer");
+          }
+        } else {
+          return;
+        }
+      } catch (error) {
+        console.error("Error fetching user:", error);
+        router.push("/login"); // Fallback in case of an error
+      } finally {
+        //setLoading(false);
+      }
+    };
+
+    checkUserRole();
+  }, [account, connected, router]);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
@@ -137,14 +161,6 @@ function NetworkStatus() {
   const { setWallet } = useContext<any>(GlobalContext);
 
   if (!connected) return null;
-  if (connected) {
-    if (Customer) {
-      redirect("/customer");
-    }
-    else {
-      redirect("/business");
-    }
-  }
 
   return (
     <Card className="shadow-md">
