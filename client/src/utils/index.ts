@@ -48,7 +48,6 @@ export const fetchUser = async (wallet_address: string) => {
   try {
     const response = await axios.get(`/api/user`);
     const users = response.data.data;
-    console.log(users);
     const foundUser = users.find((user: any) => user.wallet_address === wallet_address);
     if (foundUser) return foundUser;
     return null;

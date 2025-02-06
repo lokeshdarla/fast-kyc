@@ -7,9 +7,10 @@ import {
   useWallet,
 } from "@aptos-labs/wallet-adapter-react";
 import { Aptos, AptosConfig, Network, TransactionResponse } from "@aptos-labs/ts-sdk";
+import { toast } from "@/hooks/use-toast";
 
 interface StateContextProps {
-  handleRegisterOrganization?: (
+  handleRegisterOrganization: (
     orgName: string,
     orgDescription: string,
     requiredDocs: string[]
@@ -42,6 +43,7 @@ export const StateContextProvider: React.FC<{ children: React.ReactNode }> = ({ 
       console.log("ndmc");
       return;
     }
+    console.log("I am here");
 
     const payload: InputTransactionData = {
       data: {
@@ -55,7 +57,11 @@ export const StateContextProvider: React.FC<{ children: React.ReactNode }> = ({ 
       const response = await signAndSubmitTransaction(payload);
       console.log("Transaction Hash:", response.hash);
       await aptos.waitForTransaction({ transactionHash: response.hash });
-      alert("Organization registered successfully on Devnet!");
+      const description = response.hash;
+      toast({
+        title: "Registration done successfully",
+        description: response.hash,
+      })
     } catch (error) {
       console.error("Failed to register organization", error);
       alert("Transaction failed. Check the console for details.");
