@@ -7,15 +7,22 @@ import { CameraCapture } from '@/components/CameraCapture';
 import { DocumentUpload } from '@/components/DocumentUpload';
 import { CustomerLayout } from '@/components/CustomerLayout';
 import { encryptFile } from "@/utils/encrypt";
+import { useContext } from 'react';
 import { useWallet } from '@aptos-labs/wallet-adapter-react';
+import { StateContext } from '@/context/ContractContext';
+import Cookies from "js-cookie";
+import { useRouter } from 'next/navigation';
+
 
 dotenv.config();
 
 const Page = () => {
+  const [currentStepId, setCurrentStepId] = useState(1);
   const [uploadedFiles, setUploadedFiles] = useState<{ [key: string]: File }>({});
   const [capturedSelfie, setCapturedSelfie] = useState<Blob | null>(null);
   const { account } = useWallet();
-
+  const { handleUploadDocument } = useContext<any>(StateContext);
+  const router = useRouter();
 
   const handleFileUpload = (fileType: string, file: File) => {
     setUploadedFiles(prev => ({
@@ -30,15 +37,17 @@ const Page = () => {
 
   const submitDocuments = async () => {
     if (!uploadedFiles['voterid'] || !capturedSelfie) {
-      console.error('voterid or selfie is missing.');
+      console.error('voterid document or selfie is missing.');
       return;
     }
 
-    const formData = new FormData();
+    try{
+      const formData = new FormData();
     formData.append('docName', 'voterid');
-    formData.append('image_file', uploadedFiles['voterid']);
+    formData.append('image_file', uploadedFiles['signature-verification']);
     formData.append('webcam_image', new File([capturedSelfie], 'selfie.jpg', { type: 'image/jpg' }));
-  
+
+
         const encryptedBlob = await encryptFile(uploadedFiles['voterid'], process.env.NEXT_PUBLIC_HASH_KEY as string);
 
         const formData2 = new FormData();
@@ -53,9 +62,14 @@ const Page = () => {
 
         if (res.data.IpfsHash) {
           alert("File encrypted and uploaded to IPFS successfully!");
+          await handleUploadDocument('voterid', "", res.data.IpfsHash);
+          router.push('/customer');
         }
-
+    }catch(error){
+      console.error('Error uploading documents:', error);
+    }
       }
+
 
   return (
     <CustomerLayout>

@@ -30,7 +30,7 @@ export const StateContext = createContext<Partial<StateContextProps>>({});
 export const StateContextProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { account, signAndSubmitTransaction, network } = useWallet();
   const CONTRACT_ADRESS = "0x611227b9b8663dae6d0f28d59a31979abe6c200237e130832b6cbd43ca242dbc"
-  const MODULE_NAME = "kycv7";
+  const MODULE_NAME = "kycv8";
   const aptosConfig = new AptosConfig({ network: Network.DEVNET });
   const aptos = new Aptos(aptosConfig);
   const handleRegisterOrganization = async (

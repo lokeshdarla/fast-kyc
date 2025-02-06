@@ -13,6 +13,7 @@ import { GlobalContext } from '@/context/context';
 import { useWallet } from '@aptos-labs/wallet-adapter-react';
 import { StateContext } from '@/context/ContractContext';
 import Cookies from "js-cookie"; // Install this package if not already: npm install js-cookie
+import { useRouter } from 'next/navigation';
 
 dotenv.config();
 
@@ -22,6 +23,7 @@ const Page = () => {
   const [capturedSelfie, setCapturedSelfie] = useState<Blob | null>(null);
   const { account } = useWallet();
   const { handleUploadDocument } = useContext<any>(StateContext);
+  const router = useRouter();
 
   const handleFileUpload = (fileType: string, file: File) => {
     setUploadedFiles(prev => ({
@@ -36,33 +38,41 @@ const Page = () => {
 
   const submitDocuments = async () => {
     if (!uploadedFiles['passport'] || !capturedSelfie) {
-      console.error('passport or selfie is missing.');
+      console.error('Passport or selfie is missing.');
       return;
     }
-
-    const formData = new FormData();
-    formData.append('docName', 'passport');
-    formData.append('image_file', uploadedFiles['passport']);
-    formData.append('webcam_image', new File([capturedSelfie], 'selfie.jpg', { type: 'image/jpg' }));
-
-        const encryptedBlob = await encryptFile(uploadedFiles['passport'], process.env.NEXT_PUBLIC_HASH_KEY as string);
-
-        const formData2 = new FormData();
-        formData2.append("file", encryptedBlob, "passport_" + account?.address);
-
-        const res = await axios.post(process.env.NEXT_PUBLIC_PINATA_UPLOAD_URL as string, formData2, {
-          headers: {
-            "pinata_api_key": process.env.NEXT_PUBLIC_PINATA_API_KEY,
-            "pinata_secret_api_key": process.env.NEXT_PUBLIC_PINATA_SECRET_API_KEY,
-          },
-        });
-
-        if (res.data.IpfsHash) {
-          alert("File encrypted and uploaded to IPFS successfully!");
-        }
-
-      } 
+  
+    try {
+      const formData = new FormData();
+      formData.append('docName', 'passport');
+      formData.append('image_file', uploadedFiles['passport']);
+      formData.append('webcam_image', new File([capturedSelfie], 'selfie.jpg', { type: 'image/jpg' }));
+  
+      const encryptedBlob = await encryptFile(uploadedFiles['passport'], process.env.NEXT_PUBLIC_HASH_KEY as string);
+  
+      const formData2 = new FormData();
+      formData2.append("file", encryptedBlob, "passport_" + account?.address);
+  
+      const res = await axios.post(process.env.NEXT_PUBLIC_PINATA_UPLOAD_URL as string, formData2, {
+        headers: {
+          "pinata_api_key": process.env.NEXT_PUBLIC_PINATA_API_KEY,
+          "pinata_secret_api_key": process.env.NEXT_PUBLIC_PINATA_SECRET_API_KEY,
+        },
+      });
+  
+      if (res.data.IpfsHash) {
+        await handleUploadDocument('passport', "", res.data.IpfsHash);
+        router.push('/customer');
+      }
+    } catch (error) {
+      console.error('Error uploading documents:', error);
     
+    }
+    setUploadedFiles({});
+    setCapturedSelfie(null);
+    setCurrentStepId(1);
+  };
+  
 
   return (
     <CustomerLayout>
