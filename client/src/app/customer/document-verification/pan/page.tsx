@@ -9,10 +9,8 @@ import { DocumentUpload } from '@/components/DocumentUpload';
 import { CustomerLayout } from '@/components/CustomerLayout';
 import { encryptFile } from "@/utils/encrypt";
 import { useContext } from 'react';
-import { GlobalContext } from '@/context/context';
 import { useWallet } from '@aptos-labs/wallet-adapter-react';
 import { StateContext } from '@/context/ContractContext';
-import Cookies from "js-cookie"; // Install this package if not already: npm install js-cookie
 
 dotenv.config();
 
@@ -22,8 +20,6 @@ const Page = () => {
   const [capturedSelfie, setCapturedSelfie] = useState<Blob | null>(null);
   const { account } = useWallet();
   const { handleUploadDocument } = useContext<any>(StateContext);
-  const csrfToken2 = Cookies;
-  console.log("crsf", csrfToken2);
 
 
   const handleFileUpload = (fileType: string, file: File) => {
@@ -38,17 +34,16 @@ const Page = () => {
   };
 
   const submitDocuments = async () => {
-    if (!uploadedFiles['aadhar'] || !capturedSelfie) {
+    if (!uploadedFiles['pan'] || !capturedSelfie) {
       console.error('Aadhaar document or selfie is missing.');
       return;
     }
 
     const formData = new FormData();
-    formData.append('docName', 'Aadhaar');
-    formData.append('image_file', uploadedFiles['aadhar']);
+    formData.append('docName', 'pan');
+    formData.append('image_file', uploadedFiles['pan']);
     formData.append('webcam_image', new File([capturedSelfie], 'selfie.jpg', { type: 'image/jpg' }));
-    const csrfToken = Cookies.get('csrftoken');
-    console.log("csrf2", csrfToken);
+
 
     try {
       const response = await axios.post(
@@ -64,10 +59,10 @@ const Page = () => {
 
       if (response.data) {
         console.log('Documents uploaded successfully:', response.data);
-        const encryptedBlob = await encryptFile(uploadedFiles['aadhar'], process.env.NEXT_PUBLIC_HASH_KEY as string);
+        const encryptedBlob = await encryptFile(uploadedFiles['pan'], process.env.NEXT_PUBLIC_HASH_KEY as string);
 
         const formData2 = new FormData();
-        formData2.append("file", encryptedBlob, "aadhar_" + account?.address);
+        formData2.append("file", encryptedBlob, "pan_" + account?.address);
 
         const res = await axios.post(process.env.NEXT_PUBLIC_PINATA_UPLOAD_URL as string, formData2, {
           headers: {
@@ -78,7 +73,7 @@ const Page = () => {
 
         if (res.data.IpfsHash) {
           alert("File encrypted and uploaded to IPFS successfully!");
-          handleUploadDocument("AADHAR", JSON.stringify(response.data), res.data.IpfsHash);
+          handleUploadDocument("PAN", JSON.stringify(response.data), res.data.IpfsHash);
         }
 
       } else {
@@ -95,8 +90,8 @@ const Page = () => {
         <div className='grid md:grid-cols-2 gap-6 w-full'>
           <CameraCapture onCapture={handleSelfieCapture} />
           <DocumentUpload
-            fileType='aadhar'
-            onFileUpload={(file) => handleFileUpload('aadhar', file)}
+            fileType='pan'
+            onFileUpload={(file) => handleFileUpload('pan', file)}
           />
         </div>
 
