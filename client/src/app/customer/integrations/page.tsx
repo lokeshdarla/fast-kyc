@@ -297,7 +297,8 @@ const KYCTransactionsPage = () => {
                 <TableRow key={completion.id}>
                   <TableCell>{completion.provider}</TableCell>
                   <TableCell>
-                    {new Date(completion.date).toLocaleDateString()}
+                  {new Date(completion.date).toISOString()}
+
                   </TableCell>
                   <TableCell>
                     <Badge 

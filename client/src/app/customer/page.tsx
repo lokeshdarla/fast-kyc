@@ -95,7 +95,7 @@ export const DocumentsCard = ({ documents }) => (
             <TableCell></TableCell>
             <TableCell>
               {documents.aadhar.verified && (
-                <Link href="/customer/aadhar-verification">
+                <Link href="/customer/document-verification/aadhar-verification">
                   <Button >Upload here</Button>
                 </Link>
               )}
@@ -109,7 +109,7 @@ export const DocumentsCard = ({ documents }) => (
             <TableCell></TableCell>
             <TableCell>
               {documents.pan.verified && (
-                <Link href="/customer/document-verifications/pan">
+                <Link href="/customer/document-verification/pan">
                   <Button >Upload here</Button>
                 </Link>
               )}
@@ -123,7 +123,7 @@ export const DocumentsCard = ({ documents }) => (
             <TableCell></TableCell>
             <TableCell>
               {documents.pan.verified && (
-                <Link href="/customer/document-verifications/passport">
+                <Link href="/customer/document-verification/passport">
                   <Button >Upload here</Button>
                 </Link>
               )}
@@ -137,7 +137,7 @@ export const DocumentsCard = ({ documents }) => (
             <TableCell></TableCell>
             <TableCell>
               {documents.pan.verified && (
-                <Link href="/customer/document-verifications/voterid">
+                <Link href="/customer/document-verification/voterid">
                   <Button>Upload here</Button>
                 </Link>
               )}
@@ -151,7 +151,7 @@ export const DocumentsCard = ({ documents }) => (
             <TableCell></TableCell>
             <TableCell>
               {documents.pan.verified && (
-                <Link href="/customer/document-verifications/bank_passbook">
+                <Link href="/customer/document-verification/bank_passbook">
                   <Button >Upload here</Button>
                 </Link>
               )}

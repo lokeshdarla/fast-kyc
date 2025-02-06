@@ -139,8 +139,8 @@ const TransactionsPage = () => {
                     </div>
                     <div className="flex items-center text-sm text-gray-500 mt-1">
                       <Clock className="w-4 h-4 mr-1" />
-                      {new Date(transaction.timestamp).toLocaleString()}
-                    </div>
+                      {new Date(transaction.timestamp).toISOString()}
+                      </div>
                   </div>
 
                   {/* Transaction Hash */}

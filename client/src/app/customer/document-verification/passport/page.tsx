@@ -13,6 +13,7 @@ import { GlobalContext } from '@/context/context';
 import { useWallet } from '@aptos-labs/wallet-adapter-react';
 import { StateContext } from '@/context/ContractContext';
 import Cookies from "js-cookie"; // Install this package if not already: npm install js-cookie
+import { useRouter } from 'next/navigation';
 
 dotenv.config();
 
@@ -22,9 +23,7 @@ const Page = () => {
   const [capturedSelfie, setCapturedSelfie] = useState<Blob | null>(null);
   const { account } = useWallet();
   const { handleUploadDocument } = useContext<any>(StateContext);
-  const csrfToken2 = Cookies;
-  console.log("crsf", csrfToken2);
-
+  const router = useRouter();
 
   const handleFileUpload = (fileType: string, file: File) => {
     setUploadedFiles(prev => ({
@@ -38,56 +37,42 @@ const Page = () => {
   };
 
   const submitDocuments = async () => {
-    if (!uploadedFiles['aadhar'] || !capturedSelfie) {
-      console.error('Aadhaar document or selfie is missing.');
+    if (!uploadedFiles['passport'] || !capturedSelfie) {
+      console.error('Passport or selfie is missing.');
       return;
     }
-
-    const formData = new FormData();
-    formData.append('docName', 'Aadhaar');
-    formData.append('image_file', uploadedFiles['aadhar']);
-    formData.append('webcam_image', new File([capturedSelfie], 'selfie.jpg', { type: 'image/jpg' }));
-    const csrfToken = Cookies.get('csrftoken');
-    console.log("csrf2", csrfToken);
-
+  
     try {
-      const response = await axios.post(
-        'https://39b9-2401-4900-6572-217e-34d4-14fd-7542-dc3e.ngrok-free.app/api/getAadhaarInfo/',
-        formData,
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-
-          },
-        }
-      );
-
-      if (response.data) {
-        console.log('Documents uploaded successfully:', response.data);
-        const encryptedBlob = await encryptFile(uploadedFiles['aadhar'], process.env.NEXT_PUBLIC_HASH_KEY as string);
-
-        const formData2 = new FormData();
-        formData2.append("file", encryptedBlob, "aadhar_" + account?.address);
-
-        const res = await axios.post(process.env.NEXT_PUBLIC_PINATA_UPLOAD_URL as string, formData2, {
-          headers: {
-            "pinata_api_key": process.env.NEXT_PUBLIC_PINATA_API_KEY,
-            "pinata_secret_api_key": process.env.NEXT_PUBLIC_PINATA_SECRET_API_KEY,
-          },
-        });
-
-        if (res.data.IpfsHash) {
-          alert("File encrypted and uploaded to IPFS successfully!");
-          handleUploadDocument("AADHAR", JSON.stringify(response.data), res.data.IpfsHash);
-        }
-
-      } else {
-        console.error('Upload failed');
+      const formData = new FormData();
+      formData.append('docName', 'passport');
+      formData.append('image_file', uploadedFiles['passport']);
+      formData.append('webcam_image', new File([capturedSelfie], 'selfie.jpg', { type: 'image/jpg' }));
+  
+      const encryptedBlob = await encryptFile(uploadedFiles['passport'], process.env.NEXT_PUBLIC_HASH_KEY as string);
+  
+      const formData2 = new FormData();
+      formData2.append("file", encryptedBlob, "passport_" + account?.address);
+  
+      const res = await axios.post(process.env.NEXT_PUBLIC_PINATA_UPLOAD_URL as string, formData2, {
+        headers: {
+          "pinata_api_key": process.env.NEXT_PUBLIC_PINATA_API_KEY,
+          "pinata_secret_api_key": process.env.NEXT_PUBLIC_PINATA_SECRET_API_KEY,
+        },
+      });
+  
+      if (res.data.IpfsHash) {
+        await handleUploadDocument('passport', "", res.data.IpfsHash);
+        router.push('/customer');
       }
-    } catch (error: any) {
-      console.error('Error uploading documents:', error.response?.data || error.message);
+    } catch (error) {
+      console.error('Error uploading documents:', error);
+    
     }
+    setUploadedFiles({});
+    setCapturedSelfie(null);
+    setCurrentStepId(1);
   };
+  
 
   return (
     <CustomerLayout>
@@ -95,8 +80,8 @@ const Page = () => {
         <div className='grid md:grid-cols-2 gap-6 w-full'>
           <CameraCapture onCapture={handleSelfieCapture} />
           <DocumentUpload
-            fileType='aadhar'
-            onFileUpload={(file) => handleFileUpload('aadhar', file)}
+            fileType='passport'
+            onFileUpload={(file) => handleFileUpload('passport', file)}
           />
         </div>
 

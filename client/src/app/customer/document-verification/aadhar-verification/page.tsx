@@ -22,9 +22,6 @@ const Page = () => {
   const [capturedSelfie, setCapturedSelfie] = useState<Blob | null>(null);
   const { account } = useWallet();
   const { handleUploadDocument } = useContext<any>(StateContext);
-  const csrfToken2 = Cookies;
-  console.log("crsf", csrfToken2);
-
 
   const handleFileUpload = (fileType: string, file: File) => {
     setUploadedFiles(prev => ({
