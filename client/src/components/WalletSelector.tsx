@@ -1,5 +1,5 @@
 "use client";
-
+import axios from "axios";
 import {
   APTOS_CONNECT_ACCOUNT_URL,
   AboutAptosConnect,
@@ -22,7 +22,7 @@ import {
   LogOut,
   User,
 } from "lucide-react";
-import { useCallback, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import {
   Collapsible,
@@ -43,11 +43,53 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import { useToast } from "@/hooks/use-toast";
+import { GlobalContext } from "@/context/context";
 
 export function WalletSelector(walletSortingOptions: WalletSortingOptions) {
   const { account, connected, disconnect, wallet } = useWallet();
+  const { Customer } = useContext<any>(GlobalContext);
   const { toast } = useToast();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const fetchUser = async (wallet: string) => {
+    try {
+      const response = await axios.get(`/api/user`);
+      const users = response.data;
+      const foundUser = users.find((user: any) => user.wallet_address === account?.address);
+      if (foundUser) return foundUser;
+      return null;
+    } catch (error) {
+      console.error("Error fetching user:", error);
+      return null;
+    }
+  };
+
+  const saveUser = async (wallet_address: string) => {
+    try {
+      const role = Customer ? "CUSTOMER" : "BUSINESS";
+      await axios.post("/api/user", { wallet_address: wallet_address, role: role });
+      console.log("User saved successfully");
+    } catch (error) {
+      console.error("Error saving user:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (!wallet) return;
+
+    const checkAndSaveUser = async () => {
+      if (account) {
+        const existingUser = await fetchUser(account?.address);
+        if (!existingUser) {
+          await saveUser(account.address);
+        }
+      }
+
+    };
+
+    checkAndSaveUser();
+  }, [wallet]);
+
 
   const closeDialog = useCallback(() => setIsDialogOpen(false), []);
 

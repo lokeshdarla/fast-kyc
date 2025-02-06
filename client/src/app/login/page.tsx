@@ -1,9 +1,9 @@
 "use client";
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useAutoConnect } from "@/components/AutoConnectProvider";
 import { WalletSelector as ShadcnWalletSelector } from "@/components/WalletSelector";
-import { redirect } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import {
   Card,
   CardContent,
@@ -17,7 +17,7 @@ import { MyWallet } from "@/utils/standardWallet";
 import { registerWallet } from "@aptos-labs/wallet-standard";
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import {GlobalContext} from "@/context/context";
+import { GlobalContext } from "@/context/context";
 import { useContext } from 'react';
 
 // Register wallet on client-side only
@@ -27,7 +27,14 @@ if (typeof window !== "undefined") {
 }
 
 export default function Home() {
-  const { network } = useWallet();
+  const { network, connected } = useWallet();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (connected) {
+      router.push("/login");
+    }
+  }, [])
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
@@ -58,12 +65,12 @@ export default function Home() {
 
 function WalletSelection() {
   const { autoConnect, setAutoConnect } = useAutoConnect();
-  const {setCustomer} = useContext<any>(GlobalContext);
+  const { setCustomer } = useContext<any>(GlobalContext);
 
   const handleRadioChange = (value: string) => {
     if (value === "Customer") {
       setCustomer(true);
-    } else  {
+    } else {
       setCustomer(false);
     }
   };
@@ -75,22 +82,22 @@ function WalletSelection() {
           <div className='flex flex-row justify-between'>
             <div>Connect Wallet</div>
             <div>
-              
-              <RadioGroup defaultValue="Customer" 
-               onValueChange={(value) => handleRadioChange(value)}
-               >
 
-      <div className="flex items-center space-x-2">
-        <RadioGroupItem value="Customer" id="r2" />
-        <Label htmlFor="r2">Customer</Label>
-      </div>
-      <div className="flex items-center space-x-2">
-        <RadioGroupItem value="Business" id="r3" />
-        <Label htmlFor="r3">Business</Label>
-      </div>
-    </RadioGroup>
-    
-    </div>
+              <RadioGroup defaultValue="Customer"
+                onValueChange={(value) => handleRadioChange(value)}
+              >
+
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="Customer" id="r2" />
+                  <Label htmlFor="r2">Customer</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="Business" id="r3" />
+                  <Label htmlFor="r3">Business</Label>
+                </div>
+              </RadioGroup>
+
+            </div>
 
           </div>
         </CardTitle>
@@ -126,17 +133,17 @@ function WalletSelection() {
 
 function NetworkStatus() {
   const { account, connected, network } = useWallet();
-  const {Customer} = useContext<any>(GlobalContext);
-  const {setWallet} = useContext<any>(GlobalContext);
+  const { Customer } = useContext<any>(GlobalContext);
+  const { setWallet } = useContext<any>(GlobalContext);
 
   if (!connected) return null;
-  if(connected){
-     if(Customer){
-       redirect("/customer");
-      }
-      else{
-        redirect("/business");
-     }
+  if (connected) {
+    if (Customer) {
+      redirect("/customer");
+    }
+    else {
+      redirect("/business");
+    }
   }
 
   return (
