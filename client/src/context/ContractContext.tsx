@@ -6,7 +6,7 @@ import {
   InputTransactionData,
   useWallet,
 } from "@aptos-labs/wallet-adapter-react";
-import { Aptos, AptosConfig, Network } from "@aptos-labs/ts-sdk";
+import { Aptos, AptosConfig, Network, TransactionResponse } from "@aptos-labs/ts-sdk";
 
 interface StateContextProps {
   handleRegisterOrganization?: (
@@ -22,6 +22,7 @@ interface StateContextProps {
   handleVerifyKYC?: (
     orgAddress: string
   ) => Promise<void>;
+  fetchTransactions?: () => Promise<any | undefined>;
 }
 
 export const StateContext = createContext<Partial<StateContextProps>>({});
@@ -113,6 +114,30 @@ export const StateContextProvider: React.FC<{ children: React.ReactNode }> = ({ 
     }
   };
 
+  const fetchTransactions = async () => {
+    console.log("Transactions Called");
+    if (!account?.address) return;
+
+    try {
+      const response = await aptos.getAccountTransactions({
+        accountAddress: account.address,
+      });
+
+      const filteredResponse = response.filter((transaction) => {
+
+        //@ts-ignore
+        if (!transaction.payload?.function) return false;
+        //@ts-ignore
+        const functionName = transaction.payload.function.split("::");
+        return functionName[0] === CONTRACT_ADRESS;
+      });
+      return filteredResponse;
+    } catch (error) {
+      console.error("Failed to fetch transactions:", error);
+    }
+  };
+
+
   const checkVerificationStatus = async (orgAddress: string) => {
     if (!account?.address || !orgAddress) return;
 
@@ -136,6 +161,7 @@ export const StateContextProvider: React.FC<{ children: React.ReactNode }> = ({ 
         handleRegisterOrganization,
         handleUploadDocument,
         handleVerifyKYC,
+        fetchTransactions
       }}
     >
       {children}
