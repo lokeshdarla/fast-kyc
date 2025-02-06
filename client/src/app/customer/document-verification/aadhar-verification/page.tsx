@@ -7,7 +7,7 @@ import { Stepper, StepperComponent } from '@/components/Stepper';
 import { CameraCapture } from '@/components/CameraCapture';
 import { DocumentUpload } from '@/components/DocumentUpload';
 import { CustomerLayout } from '@/components/CustomerLayout';
-import { encryptFile } from "./encrypt";
+import { encryptFile } from "@/utils/encrypt";
 import { useContext } from 'react';
 import { GlobalContext } from '@/context/context';
 import { useWallet } from '@aptos-labs/wallet-adapter-react';
@@ -21,10 +21,10 @@ const Page = () => {
   const [uploadedFiles, setUploadedFiles] = useState<{ [key: string]: File }>({});
   const [capturedSelfie, setCapturedSelfie] = useState<Blob | null>(null);
   const { account } = useWallet();
-  const {handleUploadDocument} = useContext<any>(StateContext);
+  const { handleUploadDocument } = useContext<any>(StateContext);
   const csrfToken2 = Cookies;
-  console.log("crsf",csrfToken2);
-  
+  console.log("crsf", csrfToken2);
+
 
   const handleFileUpload = (fileType: string, file: File) => {
     setUploadedFiles(prev => ({
@@ -48,7 +48,7 @@ const Page = () => {
     formData.append('image_file', uploadedFiles['aadhar']);
     formData.append('webcam_image', new File([capturedSelfie], 'selfie.jpg', { type: 'image/jpg' }));
     const csrfToken = Cookies.get('csrftoken');
-    console.log("csrf2",csrfToken);
+    console.log("csrf2", csrfToken);
 
     try {
       const response = await axios.post(
@@ -69,17 +69,17 @@ const Page = () => {
         const formData2 = new FormData();
         formData2.append("file", encryptedBlob, "aadhar_" + account?.address);
 
-       const res = await axios.post(process.env.NEXT_PUBLIC_PINATA_UPLOAD_URL as string, formData2, {
-        headers: {
-          "pinata_api_key": process.env.NEXT_PUBLIC_PINATA_API_KEY,
-          "pinata_secret_api_key": process.env.NEXT_PUBLIC_PINATA_SECRET_API_KEY,
-        },
-      });
+        const res = await axios.post(process.env.NEXT_PUBLIC_PINATA_UPLOAD_URL as string, formData2, {
+          headers: {
+            "pinata_api_key": process.env.NEXT_PUBLIC_PINATA_API_KEY,
+            "pinata_secret_api_key": process.env.NEXT_PUBLIC_PINATA_SECRET_API_KEY,
+          },
+        });
 
-      if (res.data.IpfsHash) {
-        alert("File encrypted and uploaded to IPFS successfully!");
-        handleUploadDocument("AADHAR",JSON.stringify(response.data), res.data.IpfsHash);
-      }
+        if (res.data.IpfsHash) {
+          alert("File encrypted and uploaded to IPFS successfully!");
+          handleUploadDocument("AADHAR", JSON.stringify(response.data), res.data.IpfsHash);
+        }
 
       } else {
         console.error('Upload failed');

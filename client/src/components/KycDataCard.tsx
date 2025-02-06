@@ -12,7 +12,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import {
- Button
+  Button
 } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -133,7 +133,7 @@ import Link from 'next/link';
 //   </Card>
 // );
 
-const DocumentsCard = ({ documents }) => (
+export const DocumentsCard = ({ documents }) => (
   <Card className="w-full mb-6">
     <CardHeader className="bg-gray-50">
       <CardTitle className="text-lg font-medium flex items-center gap-2">
@@ -161,7 +161,7 @@ const DocumentsCard = ({ documents }) => (
             <TableCell>
               {documents.aadhar.verified && (
                 <Link href="/customer/aadhar-verification">
-                <Button className="bg-green-100 text-green-800">Verified</Button>
+                  <Button className="bg-green-100 text-green-800">Verified</Button>
                 </Link>
               )}
             </TableCell>
@@ -175,7 +175,7 @@ const DocumentsCard = ({ documents }) => (
             <TableCell>
               {documents.pan.verified && (
                 <Link href="/customer/documents-verifications/pan">
-                <Button className="bg-green-100 text-green-800">Verified</Button>
+                  <Button className="bg-green-100 text-green-800">Verified</Button>
                 </Link>
               )}
             </TableCell>
@@ -189,7 +189,7 @@ const DocumentsCard = ({ documents }) => (
             <TableCell>
               {documents.pan.verified && (
                 <Link href="/customer/documents-verifications/passport">
-                <Button className="bg-green-100 text-green-800">Verified</Button>
+                  <Button className="bg-green-100 text-green-800">Verified</Button>
                 </Link>
               )}
             </TableCell>
@@ -203,7 +203,7 @@ const DocumentsCard = ({ documents }) => (
             <TableCell>
               {documents.pan.verified && (
                 <Link href="/customer/documents-verifications/voterid">
-                <Button className="bg-green-100 text-green-800">Verified</Button>
+                  <Button className="bg-green-100 text-green-800">Verified</Button>
                 </Link>
               )}
             </TableCell>
@@ -217,13 +217,13 @@ const DocumentsCard = ({ documents }) => (
             <TableCell>
               {documents.pan.verified && (
                 <Link href="/customer/documents-verifications/bank_passbook">
-                <Button className="bg-green-100 text-green-800">Verified</Button>
+                  <Button className="bg-green-100 text-green-800">Verified</Button>
                 </Link>
               )}
             </TableCell>
           </TableRow>
-         
-       
+
+
         </TableBody>
       </Table>
     </CardContent>

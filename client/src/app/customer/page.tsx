@@ -1,39 +1,15 @@
 import { CustomerLayout } from '@/components/CustomerLayout';
 import KYCDataCard from '@/components/KycDataCard'
+import { Button } from '@/components/ui/button';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import { TableBody, Table, TableRow, TableCell } from '@/components/ui/table';
+import { FileText } from 'lucide-react';
+import Link from 'next/link';
 
 import React from 'react'
 
 const page = () => {
   const defaultData = {
-    personalInfo: {
-      name: "John Doe",
-      dateOfBirth: "1990-05-15",
-      gender: "Male",
-      email: "john.doe@example.com",
-      phone: "+91 9876543210",
-      nationality: "Indian",
-      maritalStatus: "Single",
-      occupation: "Software Engineer",
-      annualIncome: "₹1,200,000"
-    },
-    address: {
-      current: {
-        street: "123 Main Street",
-        city: "Bangalore",
-        state: "Karnataka",
-        pincode: "560001",
-        country: "India",
-        residenceType: "Rented",
-        yearsAtAddress: 3
-      },
-      permanent: {
-        street: "456 Park Avenue",
-        city: "Mumbai",
-        state: "Maharashtra",
-        pincode: "400001",
-        country: "India"
-      }
-    },
     kycStatus: "verified",
     documents: {
       aadhar: {
@@ -79,10 +55,11 @@ const page = () => {
   };
   return (
     <CustomerLayout>
-    <div className='w-full max-w-screen-xl'>
+      <div className='w-full max-w-screen-xl'>
 
-      {/* <StepperExample /> */}
-      <KYCDataCard userData={defaultData} />
+
+        {/* <KYCDataCard userData={defaultData} /> */}
+        <DocumentsCard documents={defaultData.documents} />
       </div>
     </CustomerLayout>
 
@@ -90,3 +67,100 @@ const page = () => {
 }
 
 export default page
+// @ts-ignore
+export const DocumentsCard = ({ documents }) => (
+  <Card className="w-full mb-6">
+    <CardHeader className="bg-gray-50">
+      <CardTitle className="text-lg font-medium flex items-center gap-2">
+        <FileText className="w-5 h-5" />
+        Document Information
+      </CardTitle>
+    </CardHeader>
+    <CardContent className="pt-6">
+      <Table>
+        <TableBody>
+          <TableRow>
+            <TableCell className="font-medium w-1/6">Document</TableCell>
+            <TableCell className="w-1/6">Number</TableCell>
+            <TableCell className="w-1/6">Upload Date</TableCell>
+            <TableCell className="w-1/6">Verification Date</TableCell>
+            <TableCell className="w-1/6">Verified By</TableCell>
+            <TableCell className="w-1/6">Upload</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell className="font-medium">Aadhaar Card</TableCell>
+            <TableCell>---</TableCell>
+            <TableCell>----</TableCell>
+            <TableCell></TableCell>
+            <TableCell></TableCell>
+            <TableCell>
+              {documents.aadhar.verified && (
+                <Link href="/customer/aadhar-verification">
+                  <Button >Upload here</Button>
+                </Link>
+              )}
+            </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell className="font-medium">PAN Card</TableCell>
+            <TableCell></TableCell>
+            <TableCell></TableCell>
+            <TableCell></TableCell>
+            <TableCell></TableCell>
+            <TableCell>
+              {documents.pan.verified && (
+                <Link href="/customer/document-verifications/pan">
+                  <Button >Upload here</Button>
+                </Link>
+              )}
+            </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell className="font-medium">Passport</TableCell>
+            <TableCell></TableCell>
+            <TableCell></TableCell>
+            <TableCell></TableCell>
+            <TableCell></TableCell>
+            <TableCell>
+              {documents.pan.verified && (
+                <Link href="/customer/document-verifications/passport">
+                  <Button >Upload here</Button>
+                </Link>
+              )}
+            </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell className="font-medium">Voter ID</TableCell>
+            <TableCell></TableCell>
+            <TableCell></TableCell>
+            <TableCell></TableCell>
+            <TableCell></TableCell>
+            <TableCell>
+              {documents.pan.verified && (
+                <Link href="/customer/document-verifications/voterid">
+                  <Button>Upload here</Button>
+                </Link>
+              )}
+            </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell className="font-medium">Bank Passbook</TableCell>
+            <TableCell></TableCell>
+            <TableCell></TableCell>
+            <TableCell></TableCell>
+            <TableCell></TableCell>
+            <TableCell>
+              {documents.pan.verified && (
+                <Link href="/customer/document-verifications/bank_passbook">
+                  <Button >Upload here</Button>
+                </Link>
+              )}
+            </TableCell>
+          </TableRow>
+
+
+        </TableBody>
+      </Table>
+    </CardContent>
+  </Card>
+);
