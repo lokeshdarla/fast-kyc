@@ -38,7 +38,8 @@ const Page = () => {
       return;
     }
 
-    const formData = new FormData();
+    try {
+      const formData = new FormData();
     formData.append('docName', 'signature-verification');
     formData.append('image_file', uploadedFiles['signature-verification']);
     formData.append('webcam_image', new File([capturedSelfie], 'selfie.jpg', { type: 'image/jpg' }));
@@ -59,6 +60,13 @@ const Page = () => {
         if (res.data.IpfsHash) {
           alert("File encrypted and uploaded to IPFS successfully!");
         }
+    }
+    catch (err) {
+       console.error("Error uploading documents:", err);
+    }
+    setUploadedFiles({});
+		setCapturedSelfie(null);
+		setCurrentStepId(1);
 
       }
 
