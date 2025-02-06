@@ -27,7 +27,8 @@ const KYCVerificationTable = () => {
         if (!fetchTransactions) return;
         const data = await fetchTransactions();
         console.log("Fetched Transactions:", data);
-        setTransactions(data);
+        if (data)
+          setTransactions(data);
       } catch (error) {
         console.error("Failed to fetch transactions:", error);
       }

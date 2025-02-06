@@ -129,7 +129,7 @@ export const StateContextProvider: React.FC<{ children: React.ReactNode }> = ({ 
         if (!transaction.payload?.function) return false;
         //@ts-ignore
         const functionName = transaction.payload.function.split("::");
-        return functionName[0] === CONTRACT_ADRESS;
+        return functionName[1] === MODULE_NAME;
       });
       return filteredResponse;
     } catch (error) {
