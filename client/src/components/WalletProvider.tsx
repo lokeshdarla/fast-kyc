@@ -33,7 +33,7 @@ export const WalletProvider = ({ children }: PropsWithChildren) => {
   return (
     <AptosWalletAdapterProvider
       plugins={wallets}
-      autoConnect={autoConnect}
+      autoConnect
       dappConfig={{
         network: Network.DEVNET,
         aptosApiKeys: {
