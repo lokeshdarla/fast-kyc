@@ -8,6 +8,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Eye, CheckCircle2, XCircle, Clock } from 'lucide-react';
 import { BusinessLayout } from '@/components/BusinessLayout';
 import { StateContext } from '@/context/ContractContext';
+import Link from 'next/link';
 
 interface Transaction {
   hash: string;
@@ -18,6 +19,7 @@ interface Transaction {
 }
 
 const KYCVerificationTable = () => {
+
   const { fetchTransactions } = useContext(StateContext);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
 
@@ -82,23 +84,17 @@ const KYCVerificationTable = () => {
                       ? tx.payload.arguments[2].join(", ")
                       : "-"}
                   </TableCell>
-                  <TableCell>{tx.hash}</TableCell>
+                  <TableCell>{tx.hash.slice(0, 15) + "..."}</TableCell>
                   <TableCell>{tx.sender}</TableCell>
                   <TableCell>
-                    <Dialog>
-                      <DialogTrigger asChild>
-                        <Button variant="outline" size="sm">
-                          <Eye className="w-4 h-4 mr-2" />
-                          View Details
-                        </Button>
-                      </DialogTrigger>
-                      <DialogContent className="max-w-2xl">
-                        <DialogHeader>
-                          <DialogTitle>Transaction Details</DialogTitle>
-                        </DialogHeader>
-                        <pre className="text-sm">{JSON.stringify(tx, null, 2)}</pre>
-                      </DialogContent>
-                    </Dialog>
+
+                    <Link
+                      className="inline-flex items-center px-5 py-2 justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-primary text-primary-foreground shadow hover:bg-primary/90"
+                      href={`https://explorer.aptoslabs.com/txn/${tx.hash}?network=devnet`} target='_blank'>
+
+                      View Details
+                    </Link>
+
                   </TableCell>
                 </TableRow>
               ))}
