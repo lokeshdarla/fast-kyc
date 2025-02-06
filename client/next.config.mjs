@@ -15,7 +15,7 @@ const nextConfig = {
     return [
       {
         source: "/api/proxy/:path*",
-        destination: "https://8d4e-2401-4900-6572-217e-69a4-f6c9-dc8-6519.ngrok-free.app/api/:path*", // Backend URL
+        destination: "https://39b9-2401-4900-6572-217e-34d4-14fd-7542-dc3e.ngrok-free.app/api/:path*", // Backend URL
       },
     ];
   },

@@ -9,8 +9,11 @@ import {
   Table,
   TableBody,
   TableCell,
-  TableRow
+  TableRow,
 } from '@/components/ui/table';
+import {
+ Button
+} from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import {
   User,
@@ -22,112 +25,113 @@ import {
   Clock,
   ShieldCheck
 } from 'lucide-react';
+import Link from 'next/link';
 
-const StatusCard = ({ status, riskCategory }) => (
-  <Card className="w-full mb-6">
-    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 bg-gray-50">
-      <CardTitle className="text-xl font-bold flex items-center gap-2">
-        <ShieldCheck className="w-6 h-6" />
-        KYC Status
-      </CardTitle>
-      <div className="flex gap-2 items-center">
-        <Badge variant="outline" className="font-medium">
-          Risk: {riskCategory}
-        </Badge>
-        <Badge className={
-          status === 'verified' ? "bg-green-100 text-green-800" :
-            status === 'pending' ? "bg-yellow-100 text-yellow-800" :
-              "bg-red-100 text-red-800"
-        }>
-          {status === 'verified' && <FileCheck className="w-3 h-3 mr-1" />}
-          {status === 'pending' && <AlertTriangle className="w-3 h-3 mr-1" />}
-          {status === 'rejected' && <AlertTriangle className="w-3 h-3 mr-1" />}
-          {status.charAt(0).toUpperCase() + status.slice(1)}
-        </Badge>
-      </div>
-    </CardHeader>
-  </Card>
-);
+// const StatusCard = ({ status, riskCategory }) => (
+//   <Card className="w-full mb-6">
+//     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 bg-gray-50">
+//       <CardTitle className="text-xl font-bold flex items-center gap-2">
+//         <ShieldCheck className="w-6 h-6" />
+//         KYC Status
+//       </CardTitle>
+//       <div className="flex gap-2 items-center">
+//         <Badge variant="outline" className="font-medium">
+//           Risk: {riskCategory}
+//         </Badge>
+//         <Badge className={
+//           status === 'verified' ? "bg-green-100 text-green-800" :
+//             status === 'pending' ? "bg-yellow-100 text-yellow-800" :
+//               "bg-red-100 text-red-800"
+//         }>
+//           {status === 'verified' && <FileCheck className="w-3 h-3 mr-1" />}
+//           {status === 'pending' && <AlertTriangle className="w-3 h-3 mr-1" />}
+//           {status === 'rejected' && <AlertTriangle className="w-3 h-3 mr-1" />}
+//           {status.charAt(0).toUpperCase() + status.slice(1)}
+//         </Badge>
+//       </div>
+//     </CardHeader>
+//   </Card>
+// );
 
-const PersonalInfoCard = ({ personalInfo }) => (
-  <Card className="w-full mb-6">
-    <CardHeader className="bg-gray-50">
-      <CardTitle className="text-lg font-medium flex items-center gap-2">
-        <User className="w-5 h-5" />
-        Personal Information
-      </CardTitle>
-    </CardHeader>
-    <CardContent className="pt-6">
-      <Table>
-        <TableBody>
-          <TableRow>
-            <TableCell className="font-medium w-1/4">Full Name</TableCell>
-            <TableCell>{personalInfo.name}</TableCell>
-            <TableCell className="font-medium w-1/4">Date of Birth</TableCell>
-            <TableCell>{new Date(personalInfo.dateOfBirth).toLocaleDateString()}</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell className="font-medium">Gender</TableCell>
-            <TableCell>{personalInfo.gender}</TableCell>
-            <TableCell className="font-medium">Nationality</TableCell>
-            <TableCell>{personalInfo.nationality}</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell className="font-medium">Email</TableCell>
-            <TableCell>{personalInfo.email}</TableCell>
-            <TableCell className="font-medium">Phone</TableCell>
-            <TableCell>{personalInfo.phone}</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell className="font-medium">Occupation</TableCell>
-            <TableCell>{personalInfo.occupation}</TableCell>
-            <TableCell className="font-medium">Annual Income</TableCell>
-            <TableCell>{personalInfo.annualIncome}</TableCell>
-          </TableRow>
-        </TableBody>
-      </Table>
-    </CardContent>
-  </Card>
-);
+// const PersonalInfoCard = ({ personalInfo }) => (
+//   <Card className="w-full mb-6">
+//     <CardHeader className="bg-gray-50">
+//       <CardTitle className="text-lg font-medium flex items-center gap-2">
+//         <User className="w-5 h-5" />
+//         Personal Information
+//       </CardTitle>
+//     </CardHeader>
+//     <CardContent className="pt-6">
+//       <Table>
+//         <TableBody>
+//           <TableRow>
+//             <TableCell className="font-medium w-1/4">Full Name</TableCell>
+//             <TableCell>{personalInfo.name}</TableCell>
+//             <TableCell className="font-medium w-1/4">Date of Birth</TableCell>
+//             <TableCell>{new Date(personalInfo.dateOfBirth).toLocaleDateString()}</TableCell>
+//           </TableRow>
+//           <TableRow>
+//             <TableCell className="font-medium">Gender</TableCell>
+//             <TableCell>{personalInfo.gender}</TableCell>
+//             <TableCell className="font-medium">Nationality</TableCell>
+//             <TableCell>{personalInfo.nationality}</TableCell>
+//           </TableRow>
+//           <TableRow>
+//             <TableCell className="font-medium">Email</TableCell>
+//             <TableCell>{personalInfo.email}</TableCell>
+//             <TableCell className="font-medium">Phone</TableCell>
+//             <TableCell>{personalInfo.phone}</TableCell>
+//           </TableRow>
+//           <TableRow>
+//             <TableCell className="font-medium">Occupation</TableCell>
+//             <TableCell>{personalInfo.occupation}</TableCell>
+//             <TableCell className="font-medium">Annual Income</TableCell>
+//             <TableCell>{personalInfo.annualIncome}</TableCell>
+//           </TableRow>
+//         </TableBody>
+//       </Table>
+//     </CardContent>
+//   </Card>
+// );
 
-const AddressCard = ({ address, type, icon: Icon, title }) => (
-  <Card className="w-full mb-6">
-    <CardHeader className="bg-gray-50">
-      <CardTitle className="text-lg font-medium flex items-center gap-2">
-        <Icon className="w-5 h-5" />
-        {title}
-      </CardTitle>
-    </CardHeader>
-    <CardContent className="pt-6">
-      <Table>
-        <TableBody>
-          <TableRow>
-            <TableCell className="font-medium">Street</TableCell>
-            <TableCell>{address.street}</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell className="font-medium">City</TableCell>
-            <TableCell>{address.city}</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell className="font-medium">State</TableCell>
-            <TableCell>{address.state}</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell className="font-medium">Pincode</TableCell>
-            <TableCell>{address.pincode}</TableCell>
-          </TableRow>
-          {type === 'current' && (
-            <TableRow>
-              <TableCell className="font-medium">Residence Type</TableCell>
-              <TableCell>{address.residenceType}</TableCell>
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
-    </CardContent>
-  </Card>
-);
+// const AddressCard = ({ address, type, icon: Icon, title }) => (
+//   <Card className="w-full mb-6">
+//     <CardHeader className="bg-gray-50">
+//       <CardTitle className="text-lg font-medium flex items-center gap-2">
+//         <Icon className="w-5 h-5" />
+//         {title}
+//       </CardTitle>
+//     </CardHeader>
+//     <CardContent className="pt-6">
+//       <Table>
+//         <TableBody>
+//           <TableRow>
+//             <TableCell className="font-medium">Street</TableCell>
+//             <TableCell>{address.street}</TableCell>
+//           </TableRow>
+//           <TableRow>
+//             <TableCell className="font-medium">City</TableCell>
+//             <TableCell>{address.city}</TableCell>
+//           </TableRow>
+//           <TableRow>
+//             <TableCell className="font-medium">State</TableCell>
+//             <TableCell>{address.state}</TableCell>
+//           </TableRow>
+//           <TableRow>
+//             <TableCell className="font-medium">Pincode</TableCell>
+//             <TableCell>{address.pincode}</TableCell>
+//           </TableRow>
+//           {type === 'current' && (
+//             <TableRow>
+//               <TableCell className="font-medium">Residence Type</TableCell>
+//               <TableCell>{address.residenceType}</TableCell>
+//             </TableRow>
+//           )}
+//         </TableBody>
+//       </Table>
+//     </CardContent>
+//   </Card>
+// );
 
 const DocumentsCard = ({ documents }) => (
   <Card className="w-full mb-6">
@@ -149,77 +153,111 @@ const DocumentsCard = ({ documents }) => (
             <TableCell className="w-1/6">Status</TableCell>
           </TableRow>
           <TableRow>
-            <TableCell className="font-medium">Aadhar Card</TableCell>
-            <TableCell>{documents.aadhar.number}</TableCell>
-            <TableCell>{new Date(documents.aadhar.uploadDate).toLocaleDateString()}</TableCell>
-            <TableCell>{new Date(documents.aadhar.verificationDate).toLocaleDateString()}</TableCell>
-            <TableCell>{documents.aadhar.verifiedBy}</TableCell>
+            <TableCell className="font-medium">Aadhaar Card</TableCell>
+            <TableCell>---</TableCell>
+            <TableCell>----</TableCell>
+            <TableCell></TableCell>
+            <TableCell></TableCell>
             <TableCell>
               {documents.aadhar.verified && (
-                <Badge className="bg-green-100 text-green-800">Verified</Badge>
+                <Link href="/customer/aadhar-verification">
+                <Button className="bg-green-100 text-green-800">Verified</Button>
+                </Link>
               )}
             </TableCell>
           </TableRow>
           <TableRow>
             <TableCell className="font-medium">PAN Card</TableCell>
-            <TableCell>{documents.pan.number}</TableCell>
-            <TableCell>{new Date(documents.pan.uploadDate).toLocaleDateString()}</TableCell>
-            <TableCell>{new Date(documents.pan.verificationDate).toLocaleDateString()}</TableCell>
-            <TableCell>{documents.pan.verifiedBy}</TableCell>
+            <TableCell></TableCell>
+            <TableCell></TableCell>
+            <TableCell></TableCell>
+            <TableCell></TableCell>
             <TableCell>
               {documents.pan.verified && (
-                <Badge className="bg-green-100 text-green-800">Verified</Badge>
+                <Link href="/customer/documents-verifications/pan">
+                <Button className="bg-green-100 text-green-800">Verified</Button>
+                </Link>
               )}
             </TableCell>
           </TableRow>
-          {documents.additionalDocs.map((doc, index) => (
-            <TableRow key={index}>
-              <TableCell className="font-medium">{doc.type}</TableCell>
-              <TableCell>{doc.documentType}</TableCell>
-              <TableCell>{new Date(doc.uploadDate).toLocaleDateString()}</TableCell>
-              <TableCell>{new Date(doc.verificationDate).toLocaleDateString()}</TableCell>
-              <TableCell>{doc.verifiedBy}</TableCell>
-              <TableCell>
-                {doc.verified && (
-                  <Badge className="bg-green-100 text-green-800">Verified</Badge>
-                )}
-              </TableCell>
-            </TableRow>
-          ))}
+          <TableRow>
+            <TableCell className="font-medium">Passport</TableCell>
+            <TableCell></TableCell>
+            <TableCell></TableCell>
+            <TableCell></TableCell>
+            <TableCell></TableCell>
+            <TableCell>
+              {documents.pan.verified && (
+                <Link href="/customer/documents-verifications/passport">
+                <Button className="bg-green-100 text-green-800">Verified</Button>
+                </Link>
+              )}
+            </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell className="font-medium">Voter ID</TableCell>
+            <TableCell></TableCell>
+            <TableCell></TableCell>
+            <TableCell></TableCell>
+            <TableCell></TableCell>
+            <TableCell>
+              {documents.pan.verified && (
+                <Link href="/customer/documents-verifications/voterid">
+                <Button className="bg-green-100 text-green-800">Verified</Button>
+                </Link>
+              )}
+            </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell className="font-medium">Bank Passbook</TableCell>
+            <TableCell></TableCell>
+            <TableCell></TableCell>
+            <TableCell></TableCell>
+            <TableCell></TableCell>
+            <TableCell>
+              {documents.pan.verified && (
+                <Link href="/customer/documents-verifications/bank_passbook">
+                <Button className="bg-green-100 text-green-800">Verified</Button>
+                </Link>
+              )}
+            </TableCell>
+          </TableRow>
+         
+       
         </TableBody>
       </Table>
     </CardContent>
   </Card>
 );
 
-const VerificationHistoryCard = ({ history }) => (
-  <Card className="w-full mb-6">
-    <CardHeader className="bg-gray-50">
-      <CardTitle className="text-lg font-medium flex items-center gap-2">
-        <Clock className="w-5 h-5" />
-        Verification History
-      </CardTitle>
-    </CardHeader>
-    <CardContent className="pt-6">
-      <Table>
-        <TableBody>
-          <TableRow>
-            <TableCell className="font-medium w-1/4">Last Updated</TableCell>
-            <TableCell>{new Date(history.lastUpdated).toLocaleDateString()}</TableCell>
-            <TableCell className="font-medium w-1/4">Next Review Date</TableCell>
-            <TableCell>{new Date(history.nextReviewDate).toLocaleDateString()}</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell className="font-medium">Risk Category</TableCell>
-            <TableCell>{history.riskCategory}</TableCell>
-            <TableCell className="font-medium">Remarks</TableCell>
-            <TableCell>{history.remarks}</TableCell>
-          </TableRow>
-        </TableBody>
-      </Table>
-    </CardContent>
-  </Card>
-);
+// const VerificationHistoryCard = ({ history }) => (
+//   <Card className="w-full mb-6">
+//     <CardHeader className="bg-gray-50">
+//       <CardTitle className="text-lg font-medium flex items-center gap-2">
+//         <Clock className="w-5 h-5" />
+//         Verification History
+//       </CardTitle>
+//     </CardHeader>
+//     <CardContent className="pt-6">
+//       <Table>
+//         <TableBody>
+//           <TableRow>
+//             <TableCell className="font-medium w-1/4">Last Updated</TableCell>
+//             <TableCell>{new Date(history.lastUpdated).toLocaleDateString()}</TableCell>
+//             <TableCell className="font-medium w-1/4">Next Review Date</TableCell>
+//             <TableCell>{new Date(history.nextReviewDate).toLocaleDateString()}</TableCell>
+//           </TableRow>
+//           <TableRow>
+//             <TableCell className="font-medium">Risk Category</TableCell>
+//             <TableCell>{history.riskCategory}</TableCell>
+//             <TableCell className="font-medium">Remarks</TableCell>
+//             <TableCell>{history.remarks}</TableCell>
+//           </TableRow>
+//         </TableBody>
+//       </Table>
+//     </CardContent>
+//   </Card>
+// );
 
 const KYCDataCards = ({ userData }) => {
   const defaultData = {
@@ -269,7 +307,7 @@ const KYCDataCards = ({ userData }) => {
       },
       additionalDocs: [
         {
-          type: "Address Proof",
+          type: "Voter ID",
           documentType: "Utility Bill",
           verified: true,
           uploadDate: "2024-01-15",
@@ -291,9 +329,9 @@ const KYCDataCards = ({ userData }) => {
 
   return (
     <div className="w-full space-y-6">
-      <StatusCard status={data.kycStatus} riskCategory={data.verificationHistory.riskCategory} />
-      <PersonalInfoCard personalInfo={data.personalInfo} />
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {/* <StatusCard status={data.kycStatus} riskCategory={data.verificationHistory.riskCategory} /> */}
+      {/* <PersonalInfoCard personalInfo={data.personalInfo} /> */}
+      {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <AddressCard
           address={data.address.current}
           type="current"
@@ -306,9 +344,9 @@ const KYCDataCards = ({ userData }) => {
           icon={Building2}
           title="Permanent Address"
         />
-      </div>
+      </div> */}
       <DocumentsCard documents={data.documents} />
-      <VerificationHistoryCard history={data.verificationHistory} />
+      {/* <VerificationHistoryCard history={data.verificationHistory} /> */}
     </div>
   );
 };
