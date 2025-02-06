@@ -1,0 +1,15 @@
+[package]
+name = "FastKYCv9"
+version = "1.0.0"
+authors = []
+
+[addresses]
+my_addr="611227b9b8663dae6d0f28d59a31979abe6c200237e130832b6cbd43ca242dbc"
+[dev-addresses]
+
+[dependencies.AptosFramework]
+git = "https://github.com/aptos-labs/aptos-framework.git"
+rev = "mainnet"
+subdir = "aptos-framework"
+
+[dev-dependencies]
