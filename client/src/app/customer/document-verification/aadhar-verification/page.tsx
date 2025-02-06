@@ -77,7 +77,8 @@ const Page = () => {
           },
         });
 
-         if (res.data.IpfsHash) {
+        if (res.data.IpfsHash) {
+           console.log("ipfs done")
 						await handleUploadDocument("aadhar", "", res.data.IpfsHash);
 						router.push("/customer");
 					}
