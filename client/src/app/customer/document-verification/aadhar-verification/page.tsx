@@ -25,6 +25,7 @@ const Page = () => {
   const { account } = useWallet();
   const { handleUploadDocument } = useContext<any>(StateContext);
   const router = useRouter();
+  const [loading, setLoading] = useState(false); 
 
   const handleFileUpload = (fileType: string, file: File) => {
     setUploadedFiles(prev => ({
@@ -42,6 +43,7 @@ const Page = () => {
       console.error('Aadhaar document or selfie is missing.');
       return;
     }
+     setLoading(true); 
 
     const formData = new FormData();
     formData.append('docName', 'Aadhaar');

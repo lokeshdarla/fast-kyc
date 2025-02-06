@@ -11,6 +11,7 @@ import { encryptFile } from "@/utils/encrypt";
 import { useContext } from 'react';
 import { useWallet } from '@aptos-labs/wallet-adapter-react';
 import { StateContext } from '@/context/ContractContext';
+import { useRouter } from 'next/navigation';
 
 dotenv.config();
 
@@ -20,6 +21,7 @@ const Page = () => {
   const [capturedSelfie, setCapturedSelfie] = useState<Blob | null>(null);
   const { account } = useWallet();
   const { handleUploadDocument } = useContext<any>(StateContext);
+  const router = useRouter();
 
 
   const handleFileUpload = (fileType: string, file: File) => {
@@ -47,15 +49,14 @@ const Page = () => {
 
     try {
       const response = await axios.post(
-        'https://39b9-2401-4900-6572-217e-34d4-14fd-7542-dc3e.ngrok-free.app/api/getAadhaarInfo/',
-        formData,
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-
-          },
-        }
-      );
+				"https://a2b5-103-217-237-57.ngrok-free.app/api/getAadhaarInfo/",
+				formData,
+				{
+					headers: {
+						"Content-Type": "multipart/form-data",
+					},
+				}
+			);
 
       if (response.data) {
         console.log('Documents uploaded successfully:', response.data);
@@ -71,17 +72,20 @@ const Page = () => {
           },
         });
 
-        if (res.data.IpfsHash) {
-          alert("File encrypted and uploaded to IPFS successfully!");
-          handleUploadDocument("PAN", JSON.stringify(response.data), res.data.IpfsHash);
-        }
-
+         if (res.data.IpfsHash) {
+						await handleUploadDocument("pan", "", res.data.IpfsHash);
+						router.push("/customer");
+					}
       } else {
         console.error('Upload failed');
       }
     } catch (error: any) {
       console.error('Error uploading documents:', error.response?.data || error.message);
     }
+     setUploadedFiles({});
+			setCapturedSelfie(null);
+			setCurrentStepId(1);
+
   };
 
   return (

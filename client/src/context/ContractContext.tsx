@@ -84,7 +84,6 @@ export const StateContextProvider: React.FC<{ children: React.ReactNode }> = ({ 
       alert("Document uploaded successfully!");
     } catch (error) {
       console.error("Failed to upload document", error);
-      alert("Document upload failed.");
     }
 
 

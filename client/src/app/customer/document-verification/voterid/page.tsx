@@ -68,6 +68,9 @@ const Page = () => {
     }catch(error){
       console.error('Error uploading documents:', error);
     }
+     setUploadedFiles({});
+			setCapturedSelfie(null);
+			setCurrentStepId(1);
       }
 
 
