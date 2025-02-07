@@ -1,5 +1,6 @@
 
 "use client"
+import axios from "axios";
 import React, { useEffect, useState, createContext, useContext } from "react";
 import { aptosClient, isSendableNetwork } from "@/utils";
 import {
@@ -31,7 +32,7 @@ export const StateContext = createContext<Partial<StateContextProps>>({});
 export const StateContextProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { account, signAndSubmitTransaction, network } = useWallet();
   const CONTRACT_ADRESS = "0x611227b9b8663dae6d0f28d59a31979abe6c200237e130832b6cbd43ca242dbc"
-  const MODULE_NAME = "kycv8";
+  const MODULE_NAME = "kycv9";
   const aptosConfig = new AptosConfig({ network: Network.DEVNET });
   const aptos = new Aptos(aptosConfig);
   const handleRegisterOrganization = async (
@@ -109,7 +110,7 @@ export const StateContextProvider: React.FC<{ children: React.ReactNode }> = ({ 
       const response = await signAndSubmitTransaction(payload);
       await aptos.waitForTransaction({ transactionHash: response.hash });
 
-      await checkVerificationStatus(orgAddress);
+      await checkVerificationStatus(orgAddress, response.hash);
       alert("KYC verification successful!");
     } catch (error) {
       console.error("Failed to verify KYC:", error);
@@ -143,22 +144,34 @@ export const StateContextProvider: React.FC<{ children: React.ReactNode }> = ({ 
   };
 
 
-  const checkVerificationStatus = async (orgAddress: string) => {
+  const checkVerificationStatus = async (orgAddress: string, hash: string) => {
     if (!account?.address || !orgAddress) return;
 
     try {
+      // First, check on Aptos blockchain
       const response = await aptos.view({
         payload: {
-          function:
-            `${CONTRACT_ADRESS}::${MODULE_NAME}::is_verified`,
+          function: `${CONTRACT_ADRESS}::${MODULE_NAME}::is_verified`,
           functionArguments: [account.address, orgAddress],
         },
       });
-      console.log(response);
+
+      console.log("Aptos Response:", response);
+
+      // Now, send data to the backend API
+      const apiResponse = await axios.post("/api/kyc", {
+        txn_hash: hash,
+        customer_address: account.address,
+        organisation_address: orgAddress,
+      });
+
+      console.log("API Response:", apiResponse.data);
+
     } catch (error) {
       console.error("Failed to check verification status:", error);
     }
   };
+
 
   return (
     <StateContext.Provider

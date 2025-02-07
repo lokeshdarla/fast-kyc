@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAutoConnect } from "@/components/AutoConnectProvider";
 import { WalletSelector as ShadcnWalletSelector } from "@/components/WalletSelector";
-import { redirect, useRouter } from "next/navigation";
+import { redirect, useRouter, useSearchParams } from "next/navigation";
 import {
   Card,
   CardContent,
@@ -20,6 +20,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { GlobalContext } from "@/context/context";
 import { useContext } from 'react';
 import { fetchUser } from '@/utils';
+import Cookies from 'js-cookie';
 
 // Register wallet on client-side only
 if (typeof window !== "undefined") {
@@ -30,6 +31,23 @@ if (typeof window !== "undefined") {
 export default function Home() {
   const { account, network, connected } = useWallet();
   const router = useRouter();
+
+  const searchParams = useSearchParams();
+  const [walletAddress, setWalletAddress] = useState('');
+  const [verified] = useState<Set<string>>(new Set());
+
+  useEffect(() => {
+    // Check for wallet address in query params
+    const addressFromQuery = searchParams.get('wallet-address');
+
+    if (addressFromQuery) {
+      // Store in cookies with 24 hour expiry
+      Cookies.set("wallet-address", addressFromQuery, { expires: 1 });
+      setWalletAddress(addressFromQuery);
+    }
+  }, [searchParams]);
+
+
 
   useEffect(() => {
     if (!connected || !account) {

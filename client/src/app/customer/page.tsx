@@ -32,20 +32,10 @@ const DocumentDashboard = () => {
   const defaultData = {
     documents: {
       aadhar: {
-        number: "XXXX-XXXX-1234",
-        verified: true,
-        uploadDate: "2024-01-15",
-        verificationDate: "2024-01-16",
-        verifiedBy: "KYC Officer",
-        txHash: "0x123..."
+        verified: false
       },
       pan: {
-        number: "ABCDE1234F",
-        verified: true,
-        uploadDate: "2024-01-15",
-        verificationDate: "2024-01-16",
-        verifiedBy: "KYC Officer",
-        txHash: "0x456..."
+        verified: false
       },
       passport: {
         verified: false

@@ -67,7 +67,7 @@ const BusinessRegistrationForm = () => {
 
   const gstData: GSTData = {
     stateJurisdictionCode: "AP114",
-    legalName: "WIREGUY ELECTRICALS PRIVATE LIMITED",
+    legalName: "UPSTOX",
     stateJurisdiction: "PENAMALURU",
     taxType: "Regular",
     gstNumber: "37AAECW0060B1ZT",

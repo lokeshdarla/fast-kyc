@@ -39,6 +39,7 @@ const WalletKYCHandler = () => {
     Cookies.remove(WALLET_COOKIE_NAME);
     //@ts-ignore
     await handleVerifyKYC(walletAddress);
+
     // You can add navigation logic here
   };
 

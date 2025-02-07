@@ -9,23 +9,23 @@ export const BusinessLayout = ({ children }: PropsWithChildren) => {
     const router = useRouter();
 
     useEffect(() => {
-        if (!connected) {
-            setTimeout(() => {
-                router.push("/login");
-            }, 5000); // Redirect to login after 10 seconds
-            return;
-        }
+        // if (!connected) {
+        //     setTimeout(() => {
+        //         router.push("/login");
+        //     }, 5000); // Redirect to login after 10 seconds
+        //     return;
+        // }
 
-        const checkUserRole = async () => {
-            if (account) {
-                const user = await fetchUser(account.address);
-                if (user && user.role === "CUSTOMER") {
-                    router.push("/customer");
-                }
-            }
-        };
+        // const checkUserRole = async () => {
+        //     if (account) {
+        //         const user = await fetchUser(account.address);
+        //         if (user && user.role === "CUSTOMER") {
+        //             router.push("/customer");
+        //         }
+        //     }
+        // };
 
-        checkUserRole();
+        //  checkUserRole();
     }, [account, connected, router]);
 
     return (

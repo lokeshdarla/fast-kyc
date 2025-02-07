@@ -9,11 +9,11 @@ const BusinessProfile = () => {
 
   // Business Details
   const business = {
-    name: "WIREGUY ELECTRICALS PRIVATE LIMITED",
-    gstNumber: "37AAECW0060B1ZT",
+    name: "Upstox",
+    gstNumber: "37AAECW0060B113",
     type: "Private Limited Company",
-    email: "contact@wireguy.com", // Dummy data
-    phone: "+91 98765 43210", // Dummy data
+    email: "contact@Upstox.com",
+    phone: "+91 98765 43210",
     address: {
       building: "DNO 14-0132, ROAD NO 3",
       area: "TULASI NAGAR",

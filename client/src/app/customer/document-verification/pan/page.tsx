@@ -49,14 +49,14 @@ const Page = () => {
 
     try {
       const response = await axios.post(
-				"https://a2b5-103-217-237-57.ngrok-free.app/api/getAadhaarInfo/",
-				formData,
-				{
-					headers: {
-						"Content-Type": "multipart/form-data",
-					},
-				}
-			);
+        "https://a2b5-103-217-237-57.ngrok-free.app/api/getAadhaarInfo/",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
 
       if (response.data) {
         console.log('Documents uploaded successfully:', response.data);
@@ -72,19 +72,19 @@ const Page = () => {
           },
         });
 
-         if (res.data.IpfsHash) {
-						await handleUploadDocument("pan", "", res.data.IpfsHash);
-						router.push("/customer");
-					}
+        if (res.data.IpfsHash) {
+          await handleUploadDocument("PAN", "", res.data.IpfsHash);
+          router.push("/customer");
+        }
       } else {
         console.error('Upload failed');
       }
     } catch (error: any) {
       console.error('Error uploading documents:', error.response?.data || error.message);
     }
-     setUploadedFiles({});
-			setCapturedSelfie(null);
-			setCurrentStepId(1);
+    setUploadedFiles({});
+    setCapturedSelfie(null);
+    setCurrentStepId(1);
 
   };
 
